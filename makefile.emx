@@ -1,0 +1,496 @@
+#		*Translator Definitions*
+CC = gcc
+LINK = gcc
+#OBJMODE = -Zomf -Zsys
+OBJMODE = -Zomf -Zcrtdll
+CFLAGS = -c $(OBJMODE) -Wall -Zmt -O2 -D__OS2__ -Ilib -s -funsigned-char
+LFLAGS = -Zmt $(OBJMODE) -Wall -Zstack 512 -s -lwrap
+OBJDIR = obj_emx
+TCP_INCLUDE = /watcom/include
+
+ifdef DEBUG
+CFLAGS = -c -Wall -Zmt -O2 -D__OS2__ -Ilib -g
+LFLAGS = -Zmt -Wall -Zstack 512 -g
+OBJDIR = obj_emx/debug
+LXLITE = @rem
+else
+OBJDIR = obj_emx
+LXLITE = lxlite
+endif
+
+All: batch rmail testexp testimp uucico uucp uupoll uustat uusub uux uuxqt
+
+batch:		$(OBJDIR)/batch.exe
+rmail:		$(OBJDIR)/rmail.exe
+testexp:	$(OBJDIR)/testexp.exe
+testimp:	$(OBJDIR)/testimp.exe
+uucico:		$(OBJDIR)/uucico.exe
+uucp:		$(OBJDIR)/uucp.exe
+uupoll:		$(OBJDIR)/uupoll.exe
+uustat:		$(OBJDIR)/uustat.exe
+uusub:		$(OBJDIR)/uusub.exe
+uux:		$(OBJDIR)/uux.exe
+uuxqt:		$(OBJDIR)/uuxqt.exe
+
+OBJS = \
+ $(OBJDIR)/arbmath.obj \
+ $(OBJDIR)/chdir.obj \
+ $(OBJDIR)/dater.obj \
+ $(OBJDIR)/flock.obj \
+ $(OBJDIR)/getopt.obj \
+ $(OBJDIR)/hlib.obj \
+ $(OBJDIR)/hostable.obj \
+ $(OBJDIR)/import.obj \
+ $(OBJDIR)/lib.obj \
+ $(OBJDIR)/strpool.obj \
+ $(OBJDIR)/timestmp.obj \
+ $(OBJDIR)/tzset.obj
+
+$(OBJDIR)/batch.exe: \
+ $(OBJS) \
+ $(OBJDIR)/batch.obj \
+ $(OBJDIR)/arpadate.obj \
+ $(OBJDIR)/cp.obj \
+ $(OBJDIR)/expath.obj \
+ $(OBJDIR)/fakeport.obj \
+ $(OBJDIR)/fakescr.obj \
+ $(OBJDIR)/fakeslep.obj \
+ $(OBJDIR)/hostatus.obj \
+ $(OBJDIR)/lock.obj \
+ $(OBJDIR)/pushpop.obj \
+ $(OBJDIR)/stater.obj \
+ $(OBJDIR)/swap2.obj \
+ $(OBJDIR)/usertabl.obj \
+ $(OBJDIR)/os2conio.obj
+	$(LINK) $(LFLAGS) -o $@ $^
+	$(LXLITE) /D+ /MLN /MRN /Tobj\batch.exe $@
+
+$(OBJDIR)/rmail.exe: \
+ $(OBJS) \
+ $(OBJDIR)/rmail.obj \
+ $(OBJDIR)/address.obj \
+ $(OBJDIR)/arpadate.obj \
+ $(OBJDIR)/fakeport.obj \
+ $(OBJDIR)/fakescr.obj \
+ $(OBJDIR)/getseq.obj \
+ $(OBJDIR)/head.obj \
+ $(OBJDIR)/koi8.obj \
+ $(OBJDIR)/mime.obj \
+ $(OBJDIR)/os2conio.obj \
+ $(OBJDIR)/pcmail.obj \
+ $(OBJDIR)/sendone.obj \
+ $(OBJDIR)/ssleep2.obj \
+ $(OBJDIR)/stat.obj \
+ $(OBJDIR)/swap2.obj \
+ $(OBJDIR)/tio.obj \
+ $(OBJDIR)/usertabl.obj
+	$(LINK) $(LFLAGS) -o $@ $^
+	$(LXLITE) /D+ /MLN /MRN /Tuucico\rmail.exe $@
+
+$(OBJDIR)/testexp.exe: \
+ $(OBJS) \
+ $(OBJDIR)/testexp.obj \
+ $(OBJDIR)/export.obj \
+ $(OBJDIR)/fakescr.obj \
+ $(OBJDIR)/fakeslep.obj \
+ $(OBJDIR)/os2conio.obj
+	$(LINK) $(LFLAGS) -o $@ $^
+	$(LXLITE) /D+ /MLN /MRN /Tobj\testexp.exe $@
+
+$(OBJDIR)/testimp.exe: \
+ $(OBJS) \
+ $(OBJDIR)/testimp.obj \
+ $(OBJDIR)/export.obj \
+ $(OBJDIR)/fakescr.obj \
+ $(OBJDIR)/fakeslep.obj \
+ $(OBJDIR)/os2conio.obj
+	$(LINK) $(LFLAGS) -o $@ $^
+	$(LXLITE) /D+ /MLN /MRN /Tobj\testimp.exe $@
+
+$(OBJDIR)/uucico.exe: \
+ $(OBJS) \
+ $(OBJDIR)/uucico.obj \
+ $(OBJDIR)/arpadate.obj \
+ $(OBJDIR)/checktim.obj \
+ $(OBJDIR)/dcp.obj \
+ $(OBJDIR)/dcpgpkt.obj \
+ $(OBJDIR)/dcplib.obj \
+ $(OBJDIR)/dcpstats.obj \
+ $(OBJDIR)/dcpsys.obj \
+ $(OBJDIR)/dcptpkt.obj \
+ $(OBJDIR)/dcpxfer.obj \
+ $(OBJDIR)/expath.obj \
+ $(OBJDIR)/hostatus.obj \
+ $(OBJDIR)/loadtcp.obj \
+ $(OBJDIR)/lock.obj \
+ $(OBJDIR)/modem.obj \
+ $(OBJDIR)/os2conio.obj \
+ $(OBJDIR)/pushpop.obj \
+ $(OBJDIR)/screen.obj \
+ $(OBJDIR)/script.obj \
+ $(OBJDIR)/sio.obj \
+ $(OBJDIR)/ssleep2.obj \
+ $(OBJDIR)/stater.obj \
+ $(OBJDIR)/swap2.obj \
+ $(OBJDIR)/ulib2.obj \
+ $(OBJDIR)/usertabl.obj
+	$(LINK) $(LFLAGS) -o $@ $^
+	$(LXLITE) /D+ /ML1 /Tuucico\uucico.exe $@
+
+$(OBJDIR)/uucp.exe: \
+ $(OBJS) \
+ $(OBJDIR)/uucp.obj \
+ $(OBJDIR)/cp.obj \
+ $(OBJDIR)/expath.obj \
+ $(OBJDIR)/fakeport.obj \
+ $(OBJDIR)/fakescr.obj \
+ $(OBJDIR)/fakeslep.obj \
+ $(OBJDIR)/getseq.obj \
+ $(OBJDIR)/normaliz.obj \
+ $(OBJDIR)/os2conio.obj \
+ $(OBJDIR)/pushpop.obj \
+ $(OBJDIR)/swap2.obj \
+ $(OBJDIR)/usertabl.obj
+	$(LINK) $(LFLAGS) -o $@ $^
+	$(LXLITE) /D+ /ML1 /Tobj\uucp.exe $@
+
+$(OBJDIR)/uupoll.exe: \
+ $(OBJS) \
+ $(OBJDIR)/uupoll.obj \
+ $(OBJDIR)/arpadate.obj \
+ $(OBJDIR)/fakeport.obj \
+ $(OBJDIR)/fakescr.obj \
+ $(OBJDIR)/os2conio.obj \
+ $(OBJDIR)/ssleep2.obj \
+ $(OBJDIR)/swap2.obj
+	$(LINK) $(LFLAGS) -o $@ $^
+	$(LXLITE) /D+ /ML1 /Tobj\uupoll.exe $@
+
+$(OBJDIR)/uustat.exe: \
+ $(OBJS) \
+ $(OBJDIR)/uustat.obj \
+ $(OBJDIR)/export.obj \
+ $(OBJDIR)/fakeport.obj \
+ $(OBJDIR)/fakescr.obj \
+ $(OBJDIR)/fakeslep.obj \
+ $(OBJDIR)/getseq.obj \
+ $(OBJDIR)/hostatus.obj \
+ $(OBJDIR)/os2conio.obj \
+ $(OBJDIR)/pushpop.obj \
+ $(OBJDIR)/readnext.obj \
+ $(OBJDIR)/stater.obj
+	$(LINK) $(LFLAGS) -o $@ $^
+	$(LXLITE) /D+ /ML1 /Tobj\uustat.exe $@
+
+$(OBJDIR)/uusub.exe: \
+ $(OBJS) \
+ $(OBJDIR)/uusub.obj \
+ $(OBJDIR)/fakeport.obj \
+ $(OBJDIR)/fakescr.obj \
+ $(OBJDIR)/fakeslep.obj \
+ $(OBJDIR)/hostrset.obj \
+ $(OBJDIR)/hostatus.obj \
+ $(OBJDIR)/lock.obj \
+ $(OBJDIR)/os2conio.obj \
+ $(OBJDIR)/stater.obj
+	$(LINK) $(LFLAGS) -o $@ $^
+	$(LXLITE) /D+ /ML1 /Tobj\uusub.exe $@
+
+$(OBJDIR)/uux.exe: \
+ $(OBJS) \
+ $(OBJDIR)/uux.obj \
+ $(OBJDIR)/arpadate.obj \
+ $(OBJDIR)/cp.obj \
+ $(OBJDIR)/expath.obj \
+ $(OBJDIR)/fakeport.obj \
+ $(OBJDIR)/fakescr.obj \
+ $(OBJDIR)/fakeslep.obj \
+ $(OBJDIR)/getseq.obj \
+ $(OBJDIR)/hostatus.obj \
+ $(OBJDIR)/os2conio.obj \
+ $(OBJDIR)/pushpop.obj \
+ $(OBJDIR)/stater.obj \
+ $(OBJDIR)/swap2.obj \
+ $(OBJDIR)/usertabl.obj
+	$(LINK) $(LFLAGS) -o $@ $^
+	$(LXLITE) /D+ /MLN /MRN /Tobj\uux.exe $@
+
+$(OBJDIR)/uuxqt.exe: \
+ $(OBJS) \
+ $(OBJDIR)/uuxqt.obj \
+ $(OBJDIR)/arpadate.obj \
+ $(OBJDIR)/cp.obj \
+ $(OBJDIR)/expath.obj \
+ $(OBJDIR)/fakeport.obj \
+ $(OBJDIR)/fakeslep.obj \
+ $(OBJDIR)/koi8.obj \
+ $(OBJDIR)/lock.obj \
+ $(OBJDIR)/os2conio.obj \
+ $(OBJDIR)/pushpop.obj \
+ $(OBJDIR)/readnext.obj \
+ $(OBJDIR)/screen.obj \
+ $(OBJDIR)/stater.obj \
+ $(OBJDIR)/swap2.obj \
+ $(OBJDIR)/usertabl.obj
+	$(LINK) $(LFLAGS) -o $@ $^
+	$(LXLITE) /D+ /ML1 /Tuucico\uuxqt.exe $@
+
+#		*Individual File Dependencies*
+$(OBJDIR)/batch.obj: util\batch.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/rmail.obj: rmail\rmail.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/address.obj: rmail\address.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/arbmath.obj: lib\arbmath.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/arpadate.obj: lib\arpadate.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/chdir.obj: lib\chdir.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/checktim.obj: uucico\checktim.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/cp.obj: lib\cp.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/dater.obj: lib\dater.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/dcp.obj: uucico\dcp.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/dcpgpkt.obj: uucico\dcpgpkt.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/dcplib.obj: uucico\dcplib.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/dcpstats.obj: uucico\dcpstats.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/dcpsys.obj: uucico\dcpsys.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/dcptpkt.obj: uucico\dcptpkt.c
+	$(CC) $(CFLAGS) -I$(TCP_INCLUDE) -D_System= -o $@ $<
+$(OBJDIR)/dcpxfer.obj: uucico\dcpxfer.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/expath.obj: lib\expath.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/export.obj: lib\export.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/fakeport.obj: lib\fakeport.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/fakescr.obj: lib\fakescr.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/fakeslep.obj: lib\fakeslep.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/flock.obj: lib\flock.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/getopt.obj: lib\getopt.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/getseq.obj: lib\getseq.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/head.obj: rmail\head.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/hlib.obj: lib\hlib.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/hostable.obj: lib\hostable.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/hostatus.obj: lib\hostatus.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/hostrset.obj: lib\hostrset.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/import.obj: lib\import.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/koi8.obj: rmail\koi8.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/lib.obj: lib\lib.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/loadtcp.obj: uucico\loadtcp.c
+	$(CC) $(CFLAGS) -I$(TCP_INCLUDE) -D_System= -o $@ $<
+$(OBJDIR)/lock.obj: lib\lock.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/mime.obj: rmail\mime.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/modem.obj: uucico\modem.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/normaliz.obj: lib\normaliz.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/os2conio.obj: lib\os2conio.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/pcmail.obj: rmail\pcmail.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/pushpop.obj: lib\pushpop.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/readnext.obj: lib\readnext.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/screen.obj: uucico\screen.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/script.obj: uucico\script.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/sendone.obj: rmail\sendone.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/sio.obj: uucico\sio.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/ssleep2.obj: lib\ssleep2.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/stat.obj: rmail\stat.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/stater.obj: lib\stater.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/strpool.obj: lib\strpool.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/swap2.obj: lib\swap2.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/testexp.obj: util\testexp.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/testimp.obj: util\testimp.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/timestmp.obj: lib\timestmp.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/tio.obj: rmail\tio.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/tzset.obj: lib\tzset.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/uucp.obj: util\uucp.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/ulib2.obj: uucico\ulib2.c
+	$(CC) $(CFLAGS) -I$(TCP_INCLUDE) -o $@ $<
+$(OBJDIR)/usertabl.obj: lib\usertabl.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/uucico.obj: uucico\uucico.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/uupoll.obj: util\uupoll.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/uustat.obj: util\uustat.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/uusub.obj: util\uusub.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/uux.obj: util\uux.c
+	$(CC) $(CFLAGS) -o $@ $<
+$(OBJDIR)/uuxqt.obj: util\uuxqt.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+# DO NOT DELETE
+
+$(OBJDIR)/arbmath.obj: lib/lib.h lib/arbmath.h
+$(OBJDIR)/arpadate.obj: lib/arpadate.h
+$(OBJDIR)/chdir.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h
+$(OBJDIR)/cp.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h
+$(OBJDIR)/dater.obj: lib/lib.h lib/dater.h
+$(OBJDIR)/expath.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/expath.h
+$(OBJDIR)/expath.obj: lib/hostable.h lib/usertabl.h lib/pushpop.h
+$(OBJDIR)/export.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/arbmath.h
+$(OBJDIR)/export.obj: lib/export.h lib/hostable.h lib/import.h
+$(OBJDIR)/fakeport.obj: lib/lib.h
+$(OBJDIR)/fakescr.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/screen.h
+$(OBJDIR)/fakeslep.obj: lib/lib.h
+$(OBJDIR)/flock.obj: lib/lib.h lib/ssleep.h
+$(OBJDIR)/getopt.obj: lib/lib.h lib/getopt.h
+$(OBJDIR)/getseq.obj: lib/lib.h lib/hlib.h lib/getseq.h
+$(OBJDIR)/hlib.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/uundir.h lib/hostable.h
+$(OBJDIR)/hostable.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/hostable.h
+$(OBJDIR)/hostatus.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/hostable.h
+$(OBJDIR)/hostatus.obj: lib/hostatus.h lib/timestmp.h lib/stater.h
+$(OBJDIR)/hostrset.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/hostable.h
+$(OBJDIR)/hostrset.obj: lib/hostatus.h lib/hostrset.h lib/timestmp.h lib/stater.h
+$(OBJDIR)/hostrset.obj: lib/lock.h lib/ssleep.h
+$(OBJDIR)/import.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/import.h
+$(OBJDIR)/import.obj: lib/arbmath.h lib/hostable.h
+$(OBJDIR)/lib.obj: lib/lib.h lib/hlib.h lib/dater.h lib/hostable.h lib/screen.h
+$(OBJDIR)/lib.obj: lib/ssleep.h
+$(OBJDIR)/lock.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/dater.h lib/stater.h
+$(OBJDIR)/lock.obj: lib/lock.h lib/import.h lib/hostable.h
+$(OBJDIR)/normaliz.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h
+$(OBJDIR)/os2conio.obj: lib/os2conio.h lib/lib.h
+$(OBJDIR)/pushpop.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/pushpop.h
+$(OBJDIR)/readnext.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/readnext.h
+$(OBJDIR)/readnext.obj: lib/uundir.h lib/hostable.h
+$(OBJDIR)/ssleep2.obj: lib/os2conio.h lib/lib.h lib/ssleep.h lib/screen.h
+$(OBJDIR)/ssleep2.obj: lib/arpadate.h lib/hlib.h
+$(OBJDIR)/stater.obj: lib/lib.h
+$(OBJDIR)/strpool.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h
+$(OBJDIR)/swap2.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/swap.h
+$(OBJDIR)/timestmp.obj: lib/lib.h lib/screen.h
+$(OBJDIR)/usertabl.obj: lib/lib.h lib/hlib.h lib/usertabl.h lib/hostable.h
+$(OBJDIR)/address.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h rmail/address.h
+$(OBJDIR)/address.obj: lib/hostable.h
+$(OBJDIR)/head.obj: lib/lib.h rmail/pcmail.h
+$(OBJDIR)/koi8.obj: lib/lib.h lib/hlib.h rmail/pcmail.h
+$(OBJDIR)/mime.obj: lib/lib.h rmail/pcmail.h rmail/rmailcfg.h
+$(OBJDIR)/pcmail.obj: lib/lib.h lib/arpadate.h lib/hlib.h lib/hostable.h
+$(OBJDIR)/pcmail.obj: lib/import.h rmail/address.h lib/timestmp.h lib/getopt.h
+$(OBJDIR)/pcmail.obj: lib/getseq.h lib/pushpop.h rmail/pcmail.h rmail/tio.h
+$(OBJDIR)/rmail.obj: lib/lib.h lib/hlib.h lib/timestmp.h lib/arpadate.h
+$(OBJDIR)/rmail.obj: rmail/pcmail.h lib/pushpop.h lib/getopt.h lib/swap.h
+$(OBJDIR)/sendone.obj: lib/lib.h lib/hlib.h lib/hostable.h rmail/address.h
+$(OBJDIR)/sendone.obj: lib/usertabl.h rmail/pcmail.h lib/swap.h lib/memlim.h
+$(OBJDIR)/sendone.obj: rmail/tio.h rmail/rmailcfg.h
+$(OBJDIR)/stat.obj: lib/lib.h lib/hlib.h rmail/address.h rmail/pcmail.h
+$(OBJDIR)/tio.obj: lib/lib.h lib/hlib.h rmail/tio.h
+$(OBJDIR)/checktim.obj: lib/lib.h uucico/checktim.h
+$(OBJDIR)/dcp.obj: lib/lib.h lib/arpadate.h uucico/checktim.h uucico/dcp.h
+$(OBJDIR)/dcp.obj: uucico/dcplib.h uucico/dcpstats.h uucico/dcpsys.h
+$(OBJDIR)/dcp.obj: uucico/dcpxfer.h lib/hlib.h lib/hostable.h lib/hostatus.h
+$(OBJDIR)/dcp.obj: uucico/modem.h lib/ssleep.h lib/screen.h uucico/ulib.h
+$(OBJDIR)/dcp.obj: lib/lock.h
+$(OBJDIR)/dcpgpkt.obj: lib/lib.h uucico/dcp.h uucico/dcpsys.h lib/hostable.h
+$(OBJDIR)/dcpgpkt.obj: uucico/ulib.h uucico/dcpgpkt.h uucico/comm.h lib/screen.h
+$(OBJDIR)/dcpgpkt.obj: lib/ssleep.h
+$(OBJDIR)/dcplib.obj: lib/lib.h lib/arpadate.h uucico/dcp.h uucico/dcplib.h
+$(OBJDIR)/dcplib.obj: uucico/dcpsys.h lib/hlib.h lib/hostable.h lib/import.h
+$(OBJDIR)/dcplib.obj: uucico/modem.h lib/pushpop.h lib/ssleep.h uucico/comm.h
+$(OBJDIR)/dcplib.obj: uucico/ulib.h lib/usertabl.h lib/swap.h
+$(OBJDIR)/dcpstats.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h uucico/dcp.h
+$(OBJDIR)/dcpstats.obj: uucico/dcpstats.h lib/hostable.h lib/hostatus.h
+$(OBJDIR)/dcpstats.obj: lib/timestmp.h lib/lock.h lib/ssleep.h lib/stater.h
+$(OBJDIR)/dcpsys.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/arpadate.h
+$(OBJDIR)/dcpsys.obj: uucico/checktim.h uucico/dcp.h uucico/dcpgpkt.h
+$(OBJDIR)/dcpsys.obj: uucico/dcptpkt.h uucico/dcplib.h uucico/dcpsys.h
+$(OBJDIR)/dcpsys.obj: lib/hostable.h uucico/modem.h lib/uundir.h uucico/ulib.h
+$(OBJDIR)/dcpsys.obj: uucico/comm.h lib/ssleep.h lib/lock.h lib/screen.h
+$(OBJDIR)/dcpsys.obj: lib/swap.h
+$(OBJDIR)/dcptpkt.obj: lib/lib.h uucico/dcptpkt.h uucico/dcp.h uucico/ulib.h
+$(OBJDIR)/dcptpkt.obj: lib/hostable.h lib/screen.h
+$(OBJDIR)/dcpxfer.obj: lib/lib.h uucico/dcp.h uucico/dcpsys.h uucico/dcpxfer.h
+$(OBJDIR)/dcpxfer.obj: uucico/dcpgpkt.h lib/expath.h lib/hlib.h lib/hostable.h
+$(OBJDIR)/dcpxfer.obj: lib/import.h uucico/ulib.h lib/screen.h lib/ssleep.h
+$(OBJDIR)/loadtcp.obj: lib/lib.h
+$(OBJDIR)/modem.obj: lib/lib.h lib/arpadate.h uucico/checktim.h uucico/dcp.h
+$(OBJDIR)/modem.obj: uucico/dcpsys.h lib/hlib.h lib/hostable.h uucico/modem.h
+$(OBJDIR)/modem.obj: uucico/script.h lib/ssleep.h uucico/ulib.h uucico/comm.h
+$(OBJDIR)/modem.obj: uucico/mnp.h lib/screen.h
+$(OBJDIR)/screen.obj: lib/lib.h lib/hlib.h lib/hostable.h lib/arpadate.h
+$(OBJDIR)/screen.obj: lib/ssleep.h lib/screen.h
+$(OBJDIR)/script.obj: lib/lib.h uucico/dcp.h uucico/dcpsys.h lib/hostable.h
+$(OBJDIR)/script.obj: uucico/modem.h uucico/script.h lib/ssleep.h uucico/ulib.h
+$(OBJDIR)/script.obj: uucico/comm.h
+$(OBJDIR)/sio.obj: lib/lib.h lib/hlib.h uucico/ulib.h uucico/fossil.h
+$(OBJDIR)/sio.obj: uucico/comm.h lib/ssleep.h lib/pushpop.h uucico/dcp.h
+$(OBJDIR)/sio.obj: uucico/modem.h
+$(OBJDIR)/ulib2.obj: lib/os2conio.h lib/lib.h lib/hostable.h uucico/dcp.h
+$(OBJDIR)/ulib2.obj: uucico/dcpsys.h uucico/dcplib.h lib/hlib.h uucico/ulib.h
+$(OBJDIR)/ulib2.obj: uucico/comm.h uucico/fossil.h lib/ssleep.h lib/pushpop.h
+$(OBJDIR)/ulib2.obj: lib/arpadate.h lib/screen.h
+$(OBJDIR)/uucico.obj: lib/lib.h uucico/dcp.h lib/hlib.h lib/hostable.h
+$(OBJDIR)/uucico.obj: lib/pushpop.h lib/getopt.h uucico/modem.h uucico/fossil.h
+$(OBJDIR)/uucico.obj: lib/timestmp.h uucico/ulib.h lib/lock.h lib/screen.h
+$(OBJDIR)/uucico.obj: lib/swap.h
+$(OBJDIR)/batch.obj: lib/lib.h lib/hlib.h lib/getopt.h lib/expath.h lib/arpadate.h
+$(OBJDIR)/batch.obj: lib/import.h lib/pushpop.h lib/hostable.h lib/timestmp.h
+$(OBJDIR)/batch.obj: lib/lock.h lib/swap.h lib/ssleep.h
+$(OBJDIR)/testexp.obj: lib/lib.h lib/import.h lib/export.h lib/timestmp.h
+$(OBJDIR)/testimp.obj: lib/lib.h lib/import.h lib/export.h lib/timestmp.h
+$(OBJDIR)/uucp.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/expath.h lib/uundir.h
+$(OBJDIR)/uucp.obj: lib/getopt.h lib/getseq.h lib/hostable.h lib/import.h
+$(OBJDIR)/uucp.obj: lib/timestmp.h lib/swap.h
+$(OBJDIR)/uupoll.obj: lib/getopt.h lib/lib.h lib/timestmp.h lib/ssleep.h
+$(OBJDIR)/uupoll.obj: lib/hlib.h lib/arpadate.h lib/swap.h
+$(OBJDIR)/uustat.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/dater.h lib/export.h
+$(OBJDIR)/uustat.obj: lib/getopt.h lib/getseq.h lib/hostable.h lib/hostatus.h
+$(OBJDIR)/uustat.obj: lib/import.h lib/pushpop.h lib/readnext.h lib/stater.h
+$(OBJDIR)/uustat.obj: lib/timestmp.h
+$(OBJDIR)/uusub.obj: lib/uupcmoah.h lib/lib.h lib/hlib.h lib/hostable.h
+$(OBJDIR)/uusub.obj: lib/dater.h lib/hostrset.h lib/hostatus.h lib/getopt.h
+$(OBJDIR)/uusub.obj: lib/timestmp.h
+$(OBJDIR)/uux.obj: lib/lib.h lib/hlib.h lib/getopt.h lib/getseq.h lib/expath.h
+$(OBJDIR)/uux.obj: lib/arpadate.h lib/import.h lib/pushpop.h lib/hostable.h
+$(OBJDIR)/uux.obj: lib/timestmp.h lib/swap.h
+$(OBJDIR)/uuxqt.obj: lib/lib.h lib/getopt.h lib/hlib.h lib/hostable.h lib/import.h
+$(OBJDIR)/uuxqt.obj: lib/pushpop.h lib/readnext.h lib/timestmp.h lib/arpadate.h
+$(OBJDIR)/uuxqt.obj: lib/usertabl.h lib/screen.h lib/memlim.h lib/lock.h
+$(OBJDIR)/uuxqt.obj: lib/swap.h

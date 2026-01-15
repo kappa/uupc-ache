@@ -1,0 +1,27 @@
+For SFX distribution used:
+LHA version 2.55b  Copyright (c) Haruyasu Yoshizaki, 1988-92
+
+For .EXE compression used:
+<<<< Dr. Teddy's 'DIET' program for files - version 1.45f >>>>
+     .... copyright(c) 1992,6/25  by Teddy Matsumoto ....
+
+Following material related to UUCICO, UUXQT, UUX, UUPOLL, UUCP and RMAIL.
+
+Portions of this software are copyrighted by the following
+persons:
+
+Copyright (c) Richard H. Lamb 1985, 1986, 1987
+Copyright (c) Samuel Lam 1987
+Changes Copyright (c) Stuart Lynne 1987
+Changes Copyright (c) Andrew H. Derbyshire 1989
+Copyright (c) Dewey Coffman 1989
+Copyright (c) Mitch Mitchell 1991
+Changes Copyright (c) Jordan Brown 1991
+Changes Copyright (c) Mike Lipsie 1991
+Changes Copyright (c) 1989-1994 by Kendra Electronic Wonderworks
+Changes Copyright (C) 1991-2001 by Andrey A. Chernov, Moscow, Russia
+Changes Copyright (C) 1997 by Pavel Gulchouck, Kiev, Ukraine
+
+This product uses the EXEC routines by Thomas Wagner
+to minimize memory use while shelling to DOS and
+running other programs.

@@ -1,0 +1,221 @@
+/*--------------------------------------------------------------------*/
+/*    e x p o r t . c                                                 */
+/*                                                                    */
+/*    File name mapping routines for UUPC/extended                    */
+/*--------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------*/
+/*       Changes Copyright (c) 1989-1994 by Kendra Electronic         */
+/*       Wonderworks.                                                 */
+/*                                                                    */
+/*    	 Changes Copyright (c) 1994,2001 by Andrey A. Chernov.        */
+/*                                                                    */
+/*       All rights reserved except those explicitly granted by       */
+/*       the UUPC/extended license agreement.                         */
+/*--------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------*/
+/*                          RCS Information                           */
+/*--------------------------------------------------------------------*/
+
+/*
+ *    Changed to fit into UUPC/@ 04-20-94 05:17am ache
+ *
+ *    $Id: export.c 1.9 1994/03/13 17:22:20 ahd Exp $
+ *
+ *    Revision history:
+ *    $Log: export.c $
+ *     Revision 1.9  1994/03/13  17:22:20  ahd
+ *     Lower memory usage under DOS
+ *
+ *     Revision 1.8  1994/02/19  04:41:08  ahd
+ *     Use standard first header
+ *
+ *     Revision 1.7  1994/02/19  04:05:37  ahd
+ *     Use standard first header
+ *
+ *     Revision 1.6  1994/02/19  03:49:46  ahd
+ *     Use standard first header
+ *
+ *     Revision 1.5  1994/02/18  23:08:59  ahd
+ *     Use standard first header
+ *
+ *     Revision 1.4  1994/01/01  19:01:46  ahd
+ *     Annual Copyright Update
+ *
+ *     Revision 1.3  1993/10/12  00:41:51  ahd
+ *     Normalize comments
+ *
+ *     Revision 1.2  1993/10/09  15:46:15  rhg
+ *     ANSIify the source
+ *
+ */
+
+/*--------------------------------------------------------------------*/
+/*                        System include files                        */
+/*--------------------------------------------------------------------*/
+
+#include "uupcmoah.h"
+
+#include <ctype.h>
+
+/*--------------------------------------------------------------------*/
+/*                    UUPC/extended include files                     */
+/*--------------------------------------------------------------------*/
+
+#include "arbmath.h"
+#include "export.h"
+#include "hostable.h"
+#include "import.h"
+
+currentfile();
+
+extern char *E_charset;
+
+/*--------------------------------------------------------------------*/
+/*       e x p o r t p a t h                                          */
+/*                                                                    */
+/*       Convert a local environment name to UNIX format name         */
+/*--------------------------------------------------------------------*/
+
+void exportpath(char *canon, const char *host, const char *remote)
+{
+   const char *xhost;
+   char *copy;
+   char tempname[FILENAME_MAX];
+   unsigned subscript;
+   unsigned char number[MAX_DIGITS];
+   char *token, *out;
+
+   static size_t range =  UNIX_END_C - UNIX_START_C + 1;
+                              /* Determine unique number characters in
+                                 the UNIX file names we are mapping   */
+   size_t charsetsize;
+	    /* Number of allowed characters in
+                              MS-DOS file names                   */
+
+#ifdef UDEBUG
+   printmsg(5,"Exporting %s for %s", host, remote );
+#endif
+
+/*--------------------------------------------------------------------*/
+/*                      Define our character set                      */
+/*--------------------------------------------------------------------*/
+
+   if ( E_charset == NULL )
+      E_charset = DOSCHARS;
+
+   charsetsize = strlen( E_charset );
+
+/*--------------------------------------------------------------------*/
+/*                Drop leading spool directory, if any                */
+/*--------------------------------------------------------------------*/
+
+/* Ache ==============================================================*/
+   if (equalni(host, spooldir, strlen( spooldir ))) {
+      xhost = host + strlen( spooldir );
+      if (*xhost == '\\')
+	xhost++;
+   }
+   else
+      xhost = host;
+
+   copy = strdup( xhost );
+   checkref( copy );
+
+/*--------------------------------------------------------------------*/
+/*                        Drop the remote name                        */
+/*--------------------------------------------------------------------*/
+
+   token = strtok( copy, "\\");
+
+   if ((token == NULL) || !equalni( token, remote, strlen( token )))
+   {
+      printmsg(0,"exportpath: Badly formed host name \"%s\"",xhost);
+      panic();
+   }
+
+/*--------------------------------------------------------------------*/
+/*                 Get the character leading the name                 */
+/*--------------------------------------------------------------------*/
+
+   token = strtok( NULL, "\\");
+   if ( (token == NULL) || (strlen(token) != 1))
+   {
+      printmsg(0,"exportpath: Badly formed host name \"%s\"",xhost);
+      panic();
+   }
+
+   strcpy(canon, token);
+   strupr(canon);
+   strcat(canon, ".");
+
+/*--------------------------------------------------------------------*/
+/*       Create a binary number which represents our file name        */
+/*--------------------------------------------------------------------*/
+
+   for (subscript = 0; subscript < MAX_DIGITS; subscript++ )
+      number[subscript] = 0;  /* Initialize number to zero        */
+
+   token = strtok( NULL, "\\");   /* Get variable part of name         */
+   while( (*token != '\0') && (*number == '\0'))
+   {
+      unsigned char digit;
+      mult(number, charsetsize, MAX_DIGITS); /* Shift the number over */
+      digit = (unsigned char) (strchr( E_charset , *token++) - E_charset);
+      add(number, digit , MAX_DIGITS); /* Add in new low order        */
+      if (*token == '.')               /* Next character a period?    */
+         token ++;                     /* Yes --> Ignore it           */
+   } /* while */
+
+   out = &tempname[FILENAME_MAX];
+   *--out = '\0';          /* Terminate the string we will build  */
+
+/*--------------------------------------------------------------------*/
+/*         Here's the loop to actually do the base conversion         */
+/*--------------------------------------------------------------------*/
+
+      while(adiv( number, range, &subscript, MAX_DIGITS))
+       *--out = (char) (subscript + UNIX_START_C);
+
+/*--------------------------------------------------------------------*/
+/*    We sort of lied above; the first character out of the           */
+/*    conversion is not a character at all, but bits which say how    */
+/*    many characters the remote and local file names get prefixed    */
+/*    to the converted name.  Retrieve that information now           */
+/*--------------------------------------------------------------------*/
+
+      subscript = *out - UNIX_START_C;
+                              /* Convert back to pure number          */
+      token = canon + strlen( canon ); /* Remember end of string      */
+      if (subscript > HOSTLEN)
+      {
+         subscript /= HOSTLEN;
+         strcat( canon, remote );
+      }
+      else
+         strcat( canon, nodename );
+      token[ subscript ] = '\0';    /* Only use the length we were told */
+
+/*--------------------------------------------------------------------*/
+/*               Add in the variable name and we're done              */
+/*--------------------------------------------------------------------*/
+
+      strcat( canon, ++out );
+      free( copy );
+
+/*--------------------------------------------------------------------*/
+/*                          Check the result                          */
+/*--------------------------------------------------------------------*/
+
+      importpath( tempname, canon, remote );
+      if ( !equali( tempname, xhost ))
+      {
+         printmsg(0,
+            "exportpath: **mapping error** input \"%s\","
+            " result \"%s\", import \"%s\"",
+            xhost, canon, tempname );
+         panic();
+      } /* if */
+
+} /* exportpath */

@@ -1,0 +1,14 @@
+copyrght.txt
+license.txt
+*.bat
+makefile.*
+*.mak
+rmail\*.h 
+rmail\*.c 
+uucico\*.h 
+uucico\*.c 
+uucico\commfifo.asm 
+util\*.c 
+lib\*.h 
+lib\*.c
+*.lst
